@@ -1,0 +1,74 @@
+#!/usr/bin/python3
+import readline
+import os
+import re
+from subprocess import check_output, run
+from colorama import Fore 
+import art
+
+if os.name == "posix":
+   pass
+else:
+   print(Fore.RED+"\n[!] OS not supported... Exiting !\n"+Fore.WHITE)
+   exit()
+
+os.system('clear')
+
+print(art.text2art("Phone"))
+print(Fore.BLUE+"[+] Phone: A Mobile Phone Forensic Framework"+Fore.WHITE)
+print(Fore.BLUE+"[+] Creator: @cyb3rf034r3ss ( X )\n"+Fore.WHITE)
+print(Fore.YELLOW+"[x] Features:"+Fore.WHITE)
+print(Fore.BLUE+"[*] Dump Call Logs"+Fore.WHITE)
+print(Fore.BLUE+"[*] Dump SMS"+Fore.WHITE)
+print(Fore.BLUE+"[*] Dump Photos"+Fore.WHITE)
+print(Fore.BLUE+"[*] Dump Videos"+Fore.WHITE)
+print(Fore.BLUE+"[*] Dump Installed Apks"+Fore.WHITE)
+print(Fore.BLUE+"[*] Upload Files"+Fore.WHITE)
+print(Fore.BLUE+"[*] Dump Documents"+Fore.WHITE)
+print(Fore.BLUE+"[*] Find and extract informations from documents i.e passwords, emails, e.t.c"+Fore.WHITE)
+
+print(Fore.GREEN+"\n[x] Type 'help' or '?' to see available commands"+Fore.WHITE)
+print()
+
+print(Fore.YELLOW+"[-] Connected Device:"+Fore.WHITE)
+if "model" in check_output("adb devices -l", shell=True).decode():
+   print("[x]", re.findall("device:[a-z]+[0-9]+[a-z]+", check_output("adb devices -l", shell=True).decode())[0])
+   print()
+else:
+   print(Fore.RED+"\n[!] No mobile phone detected\n"+Fore.WHITE) 
+   exit()
+
+try:
+    while True:
+          shell = input("[x] Phone >> ")
+          if shell == "help" or shell == "?":
+             def get_help():
+                 print(Fore.YELLOW+"\n[!] Available Commands\n"+Fore.WHITE)
+                 print(Fore.BLUE+"[*] clear:                          Clear The Screen"+Fore.WHITE)
+                 print(Fore.BLUE+"[*] dump_call_logs:                 Dump Call Logs From Device"+Fore.WHITE)
+                 print(Fore.BLUE+"[*] dump_sms:                       Dump SMS From Device"+Fore.WHITE)
+                 print(Fore.BLUE+"[*] dump_photos:                    Download All Images From Device"+Fore.WHITE)
+                 print(Fore.BLUE+"[*] dump_downloads:                 Dump All Downloads From Device"+Fore.WHITE)
+                 print(Fore.BLUE+"[*] dump_in_apks:                   Download All Installed APKs"+Fore.WHITE)
+                 print(Fore.BLUE+"[*] dump_documents:                 Download All Documents From Device"+Fore.WHITE)
+                 print(Fore.BLUE+"[*] exfil:                          Exfiltrate Informations From Documents"+Fore.WHITE)
+                 print(Fore.BLUE+"[*] exit / quit:                    Exit From Phone"+Fore.WHITE)
+                 print()
+             get_help()
+          elif shell == "clear":
+               os.system('clear')
+          elif shell == "exit" or shell == "quit":
+               exit(0)
+          elif shell == "dump_sms":
+               check_output("adb backup -noapk -f Datas/Phone_dump_sms.ab -nocompress com.android.providers.telephony", shell=True)
+               print(Fore.BLUE+"\n[+] dump_sms completed... Extracting DB...\n"+Fore.WHITE)
+               check_output("mvt-android check-backup Datas/Phone_dump_sms.ab -o Datas/ && rm Datas/Phone_dump_sms.ab", shell=True)
+          elif shell == "dump_photos":
+               check_output("adb pull /sdcard/Pictures Datas/", shell=True)
+               print(Fore.BLUE+"\n[+] dump_photos completed...\n"+Fore.WHITE)
+          elif shell == "dump_downloads":
+               check_output("adb pull /sdcard/Download Datas/", shell=True)
+               print(Fore.BLUE+"\n[+] dump_downloads completed...\n"+Fore.WHITE)
+except KeyboardInterrupt as e:
+    print(e)
+    exit()
