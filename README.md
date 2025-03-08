@@ -1,7 +1,7 @@
 # Phone
 Phone: A Mobile Phone Forensic Framework ( Android )
 
-<img src='phone1.png'>
+<img src='phone1.PNG'>
 
 # Features
 [*] Dump Call Logs
@@ -35,6 +35,8 @@ Phone: A Mobile Phone Forensic Framework ( Android )
 [*] Make sure USB debugging is enabled on the device before connecting the device to the computer.
 
 [*] The mobile device must be unlocked for this software to work properly.
+
+[*] Create a directory named "Datas" : mkdir Datas
 
 [*] ./Phone 
 
